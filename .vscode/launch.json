@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "iPhone 16 Plus",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "994A0E7A-8D61-48B2-A12E-2AC306458853"
+        },
+        {
             "name": "university_front",
             "request": "launch",
             "type": "dart"

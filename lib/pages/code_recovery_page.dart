@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:university_front/components/my_button.dart';
 
 class CodeRecoveryPage extends StatefulWidget {
   final VoidCallback? onClose;
 
   const CodeRecoveryPage({
-    Key? key,
+    super.key,
     this.onClose,
-  }) : super(key: key);
+  });
 
   @override
   _CodeRecoveryPageState createState() => _CodeRecoveryPageState();

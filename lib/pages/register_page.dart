@@ -6,7 +6,7 @@ import 'package:university_front/controllers/register_controller.dart';
 import 'package:university_front/pages/login_page.dart';
 
 class RegisterPage extends StatelessWidget {
-  RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({super.key});
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();

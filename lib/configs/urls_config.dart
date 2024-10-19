@@ -1,5 +1,5 @@
 class UrlsConfig {
-  static const String baseUrl = 'http://10.0.2.2';
+  static const String baseUrl = 'http://10.0.0.225';
   static const int port = 8080;
   static const String path = '/api/v1/university';
   

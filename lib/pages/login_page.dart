@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
   final String? password;
   final String? recoverEmail;
 
-  LoginPage({Key? key, this.email, this.password, this.recoverEmail}) : super(key: key) {
+  LoginPage({super.key, this.email, this.password, this.recoverEmail}) {
     emailController.text = email ?? '';
     passwordController.text = password ?? '';
     recoverEmailController.text = recoverEmail ?? '';

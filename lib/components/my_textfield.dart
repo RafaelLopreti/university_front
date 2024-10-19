@@ -7,12 +7,12 @@ class MyTextField extends StatefulWidget {
   final bool isConfidential;
 
   const MyTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.keyboardType,
     required this.hintText,
     this.isConfidential = false,
-  }) : super(key: key);
+  });
 
   @override
   _MyTextFieldState createState() => _MyTextFieldState();

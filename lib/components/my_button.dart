@@ -7,13 +7,13 @@ class SignButton extends StatelessWidget {
   final Color color;
 
   const SignButton({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.text,
     this.removeDefaultShadow = false,
     this.color =
         const Color.fromARGB(255, 44, 111, 255),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

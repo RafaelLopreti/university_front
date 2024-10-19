@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'package:university_front/controllers/recovery_controller.dart';
 import 'package:university_front/pages/code_recovery_page.dart';
 import 'package:university_front/components/my_button.dart';
 import 'package:university_front/components/my_textfield.dart';
@@ -11,9 +10,9 @@ class ForgotPasswordPage extends StatefulWidget {
   final TextEditingController recoverEmailController;
 
   const ForgotPasswordPage({
-    Key? key,
+    super.key,
     required this.recoverEmailController,
-  }) : super(key: key);
+  });
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
