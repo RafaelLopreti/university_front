@@ -36,7 +36,7 @@ class LoginMethods extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text('Or continue with',
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(color: Colors.black)),
               ),
               Expanded(
                 child: Divider(

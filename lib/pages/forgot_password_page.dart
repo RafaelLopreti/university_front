@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:university_front/controllers/recovery_controller.dart';
 import 'package:university_front/pages/code_recovery_page.dart';
 import 'package:university_front/components/my_button.dart';
 import 'package:university_front/components/my_textfield.dart';
@@ -20,6 +19,7 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   bool _showCodeRecovery = false;
+  String? _verificationCode;
 
   @override
   void initState() {
@@ -36,10 +36,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           Container(
             height: MediaQuery.of(context).size.height * 0.60,
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 225, 225, 225),
+              color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25.0),
-                topRight: Radius.circular(25.0),
+                topLeft: Radius.circular(35.0),
+                topRight: Radius.circular(35.0),
               ),
             ),
             child: SingleChildScrollView(
@@ -66,7 +66,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
                   const Text(
                     'Please enter your email to receive a 6-digit verification code.',
                     style: TextStyle(
@@ -81,24 +80,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     isConfidential: false,
                   ),
                   const SizedBox(height: 30),
-                  SignButton(
-                    removeDefaultShadow: true,
+                  Button(
                     text: 'Continue',
-                    onTap: () {
-                      if (widget.recoverEmailController.text.isEmpty) {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.error,
-                          title: 'ERROR',
-                          text: 'Email must not be empty.',
-                          confirmBtnText: 'OK',
-                          confirmBtnColor:
-                              const Color.fromARGB(255, 44, 111, 255),
+                    onTap: () async {
+                      try {
+                        _verificationCode = await RecoveryController.consult(
+                          context,
+                          widget.recoverEmailController.text,
                         );
-                      } else {
-                        //RecoveryController.consult(context, widget.recoverEmailController.text);
                         setState(() {
-                           _showCodeRecovery = true;
+                          _showCodeRecovery = true;
+                        });
+                      } catch (e) {
+                        setState(() {
+                          _showCodeRecovery = false;
                         });
                       }
                     },
@@ -107,10 +102,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             ),
           ),
-          if (_showCodeRecovery)
+          if (_showCodeRecovery && _verificationCode != null)
             Align(
               alignment: Alignment.bottomCenter,
               child: CodeRecoveryPage(
+                code: _verificationCode!,
                 onClose: () {
                   setState(() {
                     _showCodeRecovery = false;

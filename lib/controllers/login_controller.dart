@@ -23,11 +23,10 @@ class LoginController {
   }
 
   static void success() {
-    print('LOGOU, NÃO TENHO HOMEPAGE AINDA');
-    // Navigator.pushReplacement(
-    //   _context,
-    //   MaterialPageRoute(builder: (context) => HomePage()),
-    // );
+    Navigator.pushReplacementNamed(
+      _context,
+      '/home',
+    );
   }
 
   static void failure() {

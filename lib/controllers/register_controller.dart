@@ -57,7 +57,8 @@ class RegisterController {
       context: _context,
       type: QuickAlertType.info,
       title: 'INFO',
-      text: 'It looks like there is already an account associated with this email. Please log in.',
+      text:
+          'It looks like there is already an account associated with this email. Please log in.',
       confirmBtnText: 'RETRY',
       confirmBtnColor: const Color.fromARGB(255, 44, 111, 255),
     );

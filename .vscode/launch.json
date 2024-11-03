@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "iPhone 16 Plus",
+            "name": "iPhone 16 Pro Max",
             "request": "launch",
             "type": "dart",
-            "deviceId": "994A0E7A-8D61-48B2-A12E-2AC306458853"
+            "deviceId": "DB43BA52-E0D2-4272-9994-7E39FAD61D4C"
         },
         {
             "name": "university_front",

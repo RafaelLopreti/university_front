@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:university_front/components/my_button.dart';
+import 'package:university_front/controllers/recovery_controller.dart';
+import 'package:university_front/pages/password_reset_page.dart';
 
 class CodeRecoveryPage extends StatefulWidget {
+  final String code;
   final VoidCallback? onClose;
 
   const CodeRecoveryPage({
     super.key,
+    required this.code,
     this.onClose,
   });
 
@@ -14,8 +20,24 @@ class CodeRecoveryPage extends StatefulWidget {
 }
 
 class _CodeRecoveryPageState extends State<CodeRecoveryPage> {
-  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+
+  late String originalCode;
+
+  @override
+  void initState() {
+    super.initState();
+    originalCode = widget.code;
+    _preFillCode(widget.code);
+  }
+
+  void _preFillCode(String code) {
+    for (int i = 0; i < code.length; i++) {
+      _controllers[i].text = code[i];
+    }
+  }
 
   @override
   void dispose() {
@@ -29,10 +51,30 @@ class _CodeRecoveryPageState extends State<CodeRecoveryPage> {
   }
 
   void _onChanged(String value, int index) {
-    if (value.length == 1 && index < 5) {
+    if (value.isNotEmpty && index < 5) {
       FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
     } else if (value.isEmpty && index > 0) {
       FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+    }
+  }
+
+  void _resendCode() async {
+    try {
+      String newCode = RecoveryController.success();
+      originalCode = newCode;
+      _preFillCode(newCode);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  bool _validateCode() {
+    String enteredCode =
+        _controllers.map((controller) => controller.text).join();
+    if (enteredCode == originalCode) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -44,7 +86,7 @@ class _CodeRecoveryPageState extends State<CodeRecoveryPage> {
         Container(
           height: MediaQuery.of(context).size.height * 0.60,
           decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 225, 225, 225),
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25.0),
               topRight: Radius.circular(25.0),
@@ -77,7 +119,6 @@ class _CodeRecoveryPageState extends State<CodeRecoveryPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 10),
                       const Text(
                         'Enter the 6 digits code that you received.',
                         style: TextStyle(
@@ -92,11 +133,14 @@ class _CodeRecoveryPageState extends State<CodeRecoveryPage> {
                             width: 50,
                             height: 60,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Focus(
+                            child: Center(
                               child: TextField(
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
                                 controller: _controllers[index],
                                 focusNode: _focusNodes[index],
                                 textAlign: TextAlign.center,
@@ -115,12 +159,35 @@ class _CodeRecoveryPageState extends State<CodeRecoveryPage> {
                         }),
                       ),
                       const SizedBox(height: 30),
-                      SignButton(
-                        removeDefaultShadow: true,
+                      Button(
                         text: 'Continue',
                         onTap: () {
-                          widget.onClose?.call();
+                          if (_validateCode()) {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (BuildContext context) {
+                                return const PasswordResetPage();
+                              },
+                            );
+                          } else {
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: 'Invalid code!',
+                              text:
+                                  'The code may be invalid or expired, try again.',
+                              confirmBtnText: 'RETRY',
+                              confirmBtnColor:
+                                  const Color.fromARGB(255, 44, 111, 255),
+                            );
+                          }
                         },
+                      ),
+                      const SizedBox(height: 10),
+                      Button(
+                        text: 'Resend',
+                        onTap: _resendCode,
                       ),
                     ],
                   ),

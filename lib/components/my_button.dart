@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SignButton extends StatelessWidget {
+class Button extends StatelessWidget {
   final Function()? onTap;
   final String text;
-  final bool removeDefaultShadow;
+  final bool activeShadow;
   final Color color;
 
-  const SignButton({
+  const Button({
     super.key,
     required this.onTap,
     required this.text,
-    this.removeDefaultShadow = false,
+    this.activeShadow = false,
     this.color =
         const Color.fromARGB(255, 44, 111, 255),
   });
@@ -24,12 +24,12 @@ class SignButton extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: removeDefaultShadow
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: !activeShadow
               ? []
               : [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withOpacity(0.10),
                     spreadRadius: 2,
                     blurRadius: 10,
                     offset: const Offset(4, 3),
