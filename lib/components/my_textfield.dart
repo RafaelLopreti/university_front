@@ -7,6 +7,8 @@ class MyTextField extends StatefulWidget {
   final String hintText;
   final bool isConfidential;
   final bool enabled;
+  final bool isFromProfilePage;
+  final ValueChanged<String>? onChanged;
 
   const MyTextField({
     super.key,
@@ -15,6 +17,8 @@ class MyTextField extends StatefulWidget {
     required this.hintText,
     this.isConfidential = false,
     this.enabled = true,
+    this.isFromProfilePage = false,
+    this.onChanged,
   });
 
   @override
@@ -26,41 +30,54 @@ class _MyTextFieldState extends State<MyTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final isTaxpayerField = widget.hintText == 'Taxpayer Registry';
+    final fieldEnabled =
+        isTaxpayerField && widget.isFromProfilePage ? false : widget.enabled;
+
+    var defaultBorderRadius = BorderRadius.circular(25);
+    var grey500 = Colors.grey[500];
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!widget.enabled)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5.0),
-              child: Text(
-                widget.hintText,
-                style: const TextStyle(color: Colors.black),
-              ),
-            ),
           TextField(
             controller: widget.controller,
             keyboardType: widget.keyboardType,
             obscureText: widget.isConfidential ? _obscureText : false,
-            enabled: widget.enabled,
-            inputFormatters: widget.hintText == 'Taxpayer Registry'
+            enabled: fieldEnabled,
+            inputFormatters: isTaxpayerField
                 ? [FilteringTextInputFormatter.digitsOnly, _cpfFormatter()]
                 : [],
+            onChanged: widget.onChanged,
+            style: TextStyle(
+              color: fieldEnabled ? Colors.black : grey500,
+            ),
             decoration: InputDecoration(
-              labelText: widget.enabled ? widget.hintText : null,
-              labelStyle: TextStyle(color: Colors.grey[500]),
+              labelText: widget.hintText,
+              labelStyle: TextStyle(
+                color: fieldEnabled ? grey500 : grey500,
+              ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide: const BorderSide(color: Colors.blue),
+                borderRadius: defaultBorderRadius,
+                borderSide: BorderSide(
+                  color: fieldEnabled ? Colors.blue : grey500!,
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: defaultBorderRadius,
+                borderSide: BorderSide(color: grey500!),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide: const BorderSide(color: Colors.blue),
+                borderRadius: defaultBorderRadius,
+                borderSide: BorderSide(
+                  color: fieldEnabled ? Colors.blue : grey500,
+                ),
               ),
-              fillColor: Colors.white,
+              fillColor: fieldEnabled ? Colors.white : Colors.grey[50],
               filled: true,
-              suffixIcon: widget.isConfidential
+              suffixIcon: widget.isConfidential && fieldEnabled
                   ? GestureDetector(
                       onTap: () {
                         setState(() {
@@ -69,7 +86,7 @@ class _MyTextFieldState extends State<MyTextField> {
                       },
                       child: Icon(
                         _obscureText ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.grey[500],
+                        color: grey500,
                       ),
                     )
                   : null,

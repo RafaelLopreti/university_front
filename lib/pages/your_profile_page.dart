@@ -8,8 +8,11 @@ class ProfileField {
   final TextEditingController controller;
   final TextInputType type;
 
-  ProfileField(
-      {required this.label, required this.controller, required this.type});
+  ProfileField({
+    required this.label,
+    required this.controller,
+    required this.type,
+  });
 }
 
 class YourProfilePage extends StatefulWidget {
@@ -23,7 +26,6 @@ class YourProfilePage extends StatefulWidget {
 
 class _YourProfilePageState extends State<YourProfilePage> {
   late List<ProfileField> _fields;
-  bool _isEditable = false;
   String? profileImage;
 
   @override
@@ -96,13 +98,13 @@ class _YourProfilePageState extends State<YourProfilePage> {
   }
 
   Future<void> _updateProfile() async {
-    // Lógica para atualizar dados
-    setState(() {
-      _isEditable = false;
-    });
+    // Lógica para atualizar os dados
+    setState(() {});
   }
 
-  Future<void> _pickImage() async {}
+  Future<void> _pickImage() async {
+    // Lógica para selecionar e atualizar a imagem de perfil
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,23 +132,22 @@ class _YourProfilePageState extends State<YourProfilePage> {
                       : const NetworkImage(
                           'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'),
                 ),
-                if (_isEditable)
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: const CircleAvatar(
-                      radius: 15,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 13,
-                        backgroundColor: Colors.blue,
-                        child: Icon(
-                          Icons.edit,
-                          size: 18,
-                          color: Colors.white,
-                        ),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: const CircleAvatar(
+                    radius: 15,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      radius: 13,
+                      backgroundColor: Colors.blue,
+                      child: Icon(
+                        Icons.edit,
+                        size: 18,
+                        color: Colors.white,
                       ),
                     ),
                   ),
+                ),
               ],
             ),
             const SizedBox(height: 40),
@@ -154,33 +155,28 @@ class _YourProfilePageState extends State<YourProfilePage> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _fields.map((field) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: MyTextField(
-                        controller: field.controller,
-                        keyboardType: field.type,
-                        hintText: field.label,
-                        isConfidential: false,
-                        enabled: _isEditable,
-                      ),
-                    );
-                  }).toList(),
+                  children: [
+                    const SizedBox(height: 6),
+                    ..._fields.map((field) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: MyTextField(
+                          controller: field.controller,
+                          keyboardType: field.type,
+                          hintText: field.label,
+                          isConfidential: false,
+                          isFromProfilePage: field.label == 'Taxpayer Registry',
+                        ),
+                      );
+                    }),
+                  ],
                 ),
               ),
             ),
             const SizedBox(height: 16),
             Button(
-              onTap: () {
-                if (_isEditable) {
-                  _updateProfile();
-                } else {
-                  setState(() {
-                    _isEditable = true;
-                  });
-                }
-              },
-              text: _isEditable ? 'Save Changes' : 'Update Profile',
+              onTap: _updateProfile,
+              text: 'Save Changes',
             ),
             const SizedBox(height: 10),
           ],
